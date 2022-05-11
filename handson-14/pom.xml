@@ -5,7 +5,7 @@
 
   <groupId>nablarch.handson</groupId>
   <artifactId>nablarch-handson14</artifactId>
-  <version>1.5.0</version>
+  <version>1.6.0</version>
 
   <properties>
     <!-- 利用するJavaのバージョン -->
@@ -295,7 +295,7 @@
     <dependency>
       <groupId>nablarch.handson</groupId>
       <artifactId>nablarch-handson-app-entity</artifactId>
-      <version>1.5.0</version>
+      <version>1.6.0</version>
     </dependency>
 
   </dependencies>
@@ -305,23 +305,11 @@
       <dependency>
         <groupId>com.nablarch.profile</groupId>
         <artifactId>nablarch-bom</artifactId>
-        <version>5u19</version>
+        <version>5u21</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <additionalparam>-Xdoclint:none</additionalparam>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 
 </project>
