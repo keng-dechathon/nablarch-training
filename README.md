@@ -68,7 +68,7 @@ Nablarch について体系的に学ぶことができます。
 以下のGitリポジトリをクローンしてください。
 ローカルで動作させるだけの場合はZipファイルとしてダウンロードし、展開するだけでもかまいません。
 
-    $git clone https://github.com/Fintan-contents/nablarch-training/tree/main
+    $git clone https://github.com/Fintan-contents/nablarch-training.git
 
 
 ### 2. mavenのプロキシ設定
