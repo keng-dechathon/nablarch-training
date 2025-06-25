@@ -8,6 +8,7 @@ import com.nablarch.example.app.web.common.file.TempFileUtil;
 import com.nablarch.example.app.web.dto.ProjectDownloadDto;
 import com.nablarch.example.app.web.dto.ProjectDto;
 import com.nablarch.example.app.web.dto.ProjectSearchDto;
+import com.nablarch.example.app.web.form.ProjectForm;
 import com.nablarch.example.app.web.form.ProjectSearchForm;
 import com.nablarch.example.app.web.form.ProjectTargetForm;
 import com.nablarch.example.app.web.form.ProjectUpdateForm;
@@ -46,7 +47,9 @@ public class ProjectAction {
      * @return HTTPレスポンス
      */
     public HttpResponse newEntity(HttpRequest request, ExecutionContext context) {
-        return new HttpResponse(500).write("not implemented yet."); // TODO
+        // clear session project, after delete return entity to project.
+        SessionUtil.delete(context, "project");
+        return new HttpResponse("/WEB-INF/view/project/create.jsp");// TODO
     }
 
     /**
@@ -56,8 +59,23 @@ public class ProjectAction {
      * @param context 実行コンテキスト
      * @return HTTPレスポンス
      */
+    @InjectForm(form = ProjectForm.class, prefix = "form")
+    @OnError(type = ApplicationException.class, path = "/WEB-INF/view/project/create.jsp")
     public HttpResponse confirmOfCreate(HttpRequest request, ExecutionContext context) {
-        return new HttpResponse(500).write("not implemented yet."); // TODO
+        ProjectForm form = context.getRequestScopedVar("form");
+        if (!UniversalDao.exists(Client.class, "FIND_BY_CLIENT_ID",
+                new Object[] {Integer.parseInt(form.getClientId())})) {
+            throw new ApplicationException(
+                    MessageUtil.createMessage(MessageLevel.ERROR, "errors.nothing.client",
+                            form.getClientId()));
+        }
+
+        Project project = BeanUtil.createAndCopy(Project.class, form);
+        LoginUserPrincipal userContext = SessionUtil.get(context, "userContext");
+        project.setUserId(userContext.getUserId());
+        SessionUtil.put(context, "project", project);
+
+        return new HttpResponse("/WEB-INF/view/project/confirmOfCreate.jsp");// TODO
     }
 
     /**
@@ -67,8 +85,12 @@ public class ProjectAction {
      * @param context 実行コンテキスト
      * @return HTTPレスポンス
      */
+    @OnDoubleSubmission
     public HttpResponse create(HttpRequest request, ExecutionContext context) {
-        return new HttpResponse(500).write("not implemented yet."); // TODO
+        // clear session project, after delete return entity to project.
+        Project project = SessionUtil.delete(context, "project");
+        UniversalDao.insert(project);
+        return new HttpResponse(303, "redirect://completeOfCreate");// TODO
     }
 
     /**
@@ -79,7 +101,7 @@ public class ProjectAction {
      * @return HTTPレスポンス
      */
     public HttpResponse completeOfCreate(HttpRequest request, ExecutionContext context) {
-        return new HttpResponse(500).write("not implemented yet."); // TODO
+        return new HttpResponse("/WEB-INF/view/project/completeOfCreate.jsp");// TODO
     }
 
     /**
@@ -90,7 +112,15 @@ public class ProjectAction {
      * @return HTTPレスポンス
      */
     public HttpResponse backToNew(HttpRequest request, ExecutionContext context) {
-        return new HttpResponse(500).write("not implemented yet."); // TODO
+        Project project = SessionUtil.get(context, "project");
+        ProjectDto dto = BeanUtil.createAndCopy(ProjectDto.class, project);
+
+        Client client = UniversalDao.findById(Client.class, dto.getClientId());
+        dto.setClientName(client.getClientName());
+
+        context.setRequestScopedVar("form", dto);
+
+        return new HttpResponse(500).write("/WEB-INF/view/project/create.jsp"); // TODO
     }
 
     /**
@@ -146,7 +176,7 @@ public class ProjectAction {
      * @return プロジェクトのリスト
      */
     private List<Project> searchProject(ProjectSearchDto searchCondition,
-            ExecutionContext context) {
+                                        ExecutionContext context) {
 
         LoginUserPrincipal userContext = SessionUtil.get(context, "userContext");
         searchCondition.setUserId(userContext.getUserId());

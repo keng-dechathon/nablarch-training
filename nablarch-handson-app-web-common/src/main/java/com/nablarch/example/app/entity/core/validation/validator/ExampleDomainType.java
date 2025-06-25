@@ -34,7 +34,7 @@ public class ExampleDomainType {
 
     /** 顧客名 */
     @Length(max = 64, message = "{domainType.clientName.message}")
-    @SystemChar(charsetDef = "全角文字", message = "{domainType.clientName.message}")
+    @SystemChar(charsetDef = "システム許容文字", message = "{domainType.clientName.message}")
     private String clientName;
 
     /** 顧客の業種を表すコード */
@@ -44,7 +44,7 @@ public class ExampleDomainType {
 
     /** プロジェクト名 */
     @Length(max = 64, message = "{domainType.projectName.message}")
-    @SystemChar(charsetDef = "全角文字", message = "{domainType.projectName.message}")
+    @SystemChar(charsetDef = "システム許容文字", message = "{domainType.projectName.message}")
     private String projectName;
 
     /** 新規開発PJ、または保守PJを表すコード値 */
@@ -77,7 +77,7 @@ public class ExampleDomainType {
 
     /** ユーザ氏名（漢字） */
     @Length(max = 64, message = "{domainType.userName.message}")
-    @SystemChar(charsetDef = "全角文字", message = "{domainType.userName.message}")
+    @SystemChar(charsetDef = "システム許容文字", message = "{domainType.userName.message}")
     private String userName;
 
     /** 備考 */
@@ -92,4 +92,6 @@ public class ExampleDomainType {
     /** ページ番号 */
     @NumberRange(min = 1, max = 9999)
     private String pageNumber;
+
+    //システム許容文字 -> อนุญาตให้กรอกตัวอักษรได่หลากหลาย
 }
