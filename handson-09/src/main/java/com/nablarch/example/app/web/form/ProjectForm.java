@@ -1,5 +1,10 @@
 package com.nablarch.example.app.web.form;
 
+import com.nablarch.example.app.entity.core.validation.validator.DateRangeValidator;
+import nablarch.core.validation.ee.Domain;
+import nablarch.core.validation.ee.Required;
+
+import javax.validation.constraints.AssertTrue;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,45 +20,63 @@ public class ProjectForm implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** プロジェクト名 */
+    @Required
+    @Domain("projectName")
     private String projectName;
 
     /** プロジェクト種別 */
+    @Required
+    @Domain("projectType")
     private String projectType;
 
     /** プロジェクト分類 */
+    @Required
+    @Domain("projectClass")
     private String projectClass;
 
     /** プロジェクトマネージャー名 */
+    @Domain("userName")
     private String projectManager;
 
     /** プロジェクトリーダー名 */
+    @Domain("userName")
     private String projectLeader;
 
     /** 顧客ID */
+    @Domain("id")
+    @Required
     private String clientId;
 
     /** 顧客名 */
+    @Domain("clientName")
     private String clientName;
 
     /** プロジェクト開始日文字列 */
+    @Domain("date")
     private String projectStartDate;
 
     /** プロジェクト終了日文字列 */
+    @Domain("date")
     private String projectEndDate;
 
     /** 備考 */
+    @Domain("note")
     private String note;
 
     /** 売上高 */
+    @Domain("amountOfMoney")
     private String sales;
 
     /** 売上原価 */
+    @Domain("amountOfMoney")
     private String costOfGoodsSold;
 
     /** 販管費 */
+    @Domain("amountOfMoney")
     private String sga;
 
     /** 本社配賦 */
+    @Domain("amountOfMoney")
     private String allocationOfCorpExpenses;
 
     /**
@@ -328,8 +351,9 @@ public class ProjectForm implements Serializable {
      *
      * @return 開始日に終了日より後の日付が設定されていた場合は false それ以外（開始日、終了日の両方又はいずれかが未定の場合も含む）は true
      */
+    @AssertTrue(message = "{com.nablarch.example.app.entity.core.validation.validator.DateRangeValidator.message}")
     private boolean isValidProjectPeriod() {
-        return false;
+        return new DateRangeValidator(projectStartDate, projectEndDate).isValid();
     }
 
     /**
