@@ -20,7 +20,7 @@ public class RestExampleDomain {
 
     /** 商品名 */
     @Length(max = 64)
-    @SystemChar(charsetDef = "全角文字", allowLineSeparator = false)
+    @SystemChar(charsetDef = "システム許容文字", allowLineSeparator = false)
     private String itemName;
 
     /** 商品カテゴリーを表すコード値 */
