@@ -3,6 +3,9 @@ package com.nablarch.example.app.batch.action;
 import com.nablarch.example.app.batch.form.ZipCodeForm;
 import com.nablarch.example.app.batch.interceptor.ValidateData;
 import com.nablarch.example.app.batch.reader.ZipCodeFileReader;
+import com.nablarch.example.app.entity.ZipCodeData;
+import nablarch.common.dao.UniversalDao;
+import nablarch.core.beans.BeanUtil;
 import nablarch.core.util.annotation.Published;
 import nablarch.fw.DataReader;
 import nablarch.fw.ExecutionContext;
@@ -31,10 +34,11 @@ public class ImportZipCodeFileAction extends BatchAction<ZipCodeForm> {
     public Result handle(ZipCodeForm inputData, ExecutionContext ctx) {
 
         // ZipCodeFileReaderから渡された一行分の情報(inputData)をZIP_CODE_DATAテーブルにinsertする処理を実装してください。
-
+        ZipCodeData entity = BeanUtil.createAndCopy(ZipCodeData.class, inputData);
+        UniversalDao.insert(entity);
 
         // 処理結果としてハンドラの処理が正常終了したことを表す結果オブジェクトを返却してください。
-        return null;
+        return new Result.Success();
     }
 
     /**
@@ -47,6 +51,6 @@ public class ImportZipCodeFileAction extends BatchAction<ZipCodeForm> {
     public DataReader<ZipCodeForm> createReader(ExecutionContext ctx) {
 
         // データリーダクラス(ZipCodeFileReader)のインスタンスを返却してください。
-        return null;
+        return new ZipCodeFileReader();
     }
 }

@@ -24,7 +24,7 @@ public class ZipCodeFileReader implements DataReader<ZipCodeForm> {
      * 読み込むファイルの名称
      */
      // 読み込むファイルの名称は「importZipCode」としてください。
-    private static final String FILE_NAME = "";
+    private static final String FILE_NAME = "importZipCode";
 
     /**
      * 処理対象のデータを返すイテレータ
@@ -42,10 +42,10 @@ public class ZipCodeFileReader implements DataReader<ZipCodeForm> {
 
         // イテレータが存在しない場合は、initializeメソッドを呼び出して、
         // イテレータを生成する処理を実装してください。
-
+        if (iterator == null) initialize();
 
         // 一行分のデータを返却してください。
-        return null;
+        return iterator.next();
     }
 
     /**
@@ -59,10 +59,10 @@ public class ZipCodeFileReader implements DataReader<ZipCodeForm> {
 
         // イテレータが存在しない場合は、initializeメソッドを呼び出して、
         // イテレータを生成する処理を実装してください。
-
+        if (iterator == null) initialize();
 
         // 次行の有無を返却してください。
-        return false;
+        return iterator.hasNext();
     }
 
     /**
@@ -73,7 +73,7 @@ public class ZipCodeFileReader implements DataReader<ZipCodeForm> {
     @Override
     public void close(ExecutionContext ctx) {
         // ObjectMapperIterator#close()を呼び出して、イテレータをclose処理するを実装してください。
-
+        iterator.close();
     }
 
     /**

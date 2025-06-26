@@ -1,7 +1,13 @@
 package com.nablarch.example.app.batch.form;
 
 
+import nablarch.common.databind.LineNumber;
+import nablarch.common.databind.csv.Csv;
+import nablarch.common.databind.csv.CsvDataBindConfig;
+import nablarch.common.databind.csv.CsvFormat;
 import nablarch.core.util.annotation.Published;
+import nablarch.core.validation.ee.Domain;
+import nablarch.core.validation.ee.Required;
 
 /**
  * {@link nablarch.fw.DataReader} が読み込んだデータレコードをバインドし、バリデーションするフォームクラス。
@@ -9,6 +15,36 @@ import nablarch.core.util.annotation.Published;
  * @author Nabu Rakutaro
  */
 // @Csvと@CsvFormatを付与してください。
+@Csv(
+        properties = {
+                "localGovernmentCode",
+                "zipCode5digit",
+                "zipCode7digit",
+                "prefectureKana",
+                "cityKana",
+                "addressKana",
+                "prefectureKanji",
+                "cityKanji",
+                "addressKanji",
+                "multipleZipCodes",
+                "numberedEveryKoaza",
+                "addressWithChome",
+                "multipleAddress",
+                "updateData",
+                "updateDataReason"
+        },
+        type = Csv.CsvType.CUSTOM
+)
+@CsvFormat(
+        fieldSeparator = ',',
+        lineSeparator = "\r\n",
+        quote = '"',
+        ignoreEmptyLine = true,
+        requiredHeader = false,
+        charset = "UTF-8",
+        quoteMode = CsvDataBindConfig.QuoteMode.NORMAL,
+        emptyToNull = true
+)
 @Published
 public class ZipCodeForm {
 
@@ -17,76 +53,106 @@ public class ZipCodeForm {
     /**
      * 全国地方公共団体コード
      */
+    @Required
+    @Domain("localGovernmentCode")
     private String localGovernmentCode;
 
     /**
      * 郵便番号（5桁）
      */
+    @Required
+    @Domain("oldZipCode")
     private String zipCode5digit;
 
     /**
      * 郵便番号（7桁）
      */
+    @Required
+    @Domain("zipCode")
     private String zipCode7digit;
 
     /**
      * 都道府県名カナ
      */
+    @Required
+    @Domain("prefectureKana")
     private String prefectureKana;
 
     /**
      * 市区町村名カナ
      */
+    @Required
+    @Domain("cityKana")
     private String cityKana;
 
     /**
      * 町域名カナ
      */
+    @Required
+    @Domain("address")
     private String addressKana;
 
     /**
      * 都道府県名漢字
      */
+    @Required
+    @Domain("prefecture")
     private String prefectureKanji;
 
     /**
      * 市区町村名漢字
      */
+    @Required
+    @Domain("city")
     private String cityKanji;
 
     /**
      * 町域名漢字
      */
+    @Required
+    @Domain("address")
     private String addressKanji;
 
     /**
      * 一町域が二以上の郵便番号
      */
+    @Required
+    @Domain("flag")
     private String multipleZipCodes;
 
     /**
      * 小字毎に番地が起番されている町域
      */
+    @Required
+    @Domain("flag")
     private String numberedEveryKoaza;
 
     /**
      * 丁目を有する町域
      */
+    @Required
+    @Domain("flag")
     private String addressWithChome;
 
     /**
      * 一つの郵便番号で二以上の町域
      */
+    @Required
+    @Domain("flag")
     private String multipleAddress;
 
     /**
      * 更新
      */
+    @Required
+    @Domain("code")
     private String updateData;
 
     /**
      * 変更理由
      */
+    @Required
+    @Domain("code")
     private String updateDataReason;
 
     /**
@@ -100,7 +166,7 @@ public class ZipCodeForm {
      * @return 行数
      */
     // 行数プロパティのゲッタに @LineNumber を付与してください。
-
+    @LineNumber
     public Long getLineNumber() {
         return lineNumber;
     }
